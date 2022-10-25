@@ -8,6 +8,9 @@ import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.EditText;
 
+import java.util.HashSet;
+import java.util.Set;
+
 public class AddNoteActivity extends AppCompatActivity {
 
     EditText edNote;
@@ -20,11 +23,27 @@ public class AddNoteActivity extends AppCompatActivity {
         this.edNote = findViewById(R.id.edNote);
     }
 
+    //About SharedPreferences: //https://developer.android.com/training/data-storage/shared-preferences
     public void onBtnSaveAndCloseClick(View view) {
-        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+        String noteToAdd = this.edNote.getText().toString();
+        //Deprecated
+        //SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+
+        //Current
+        SharedPreferences sharedPref = this.getSharedPreferences(Constants.NOTES_FILE, this.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putString(Constants.BASE_NOTE_KEY, this.edNote.getText().toString());
+
+        Set<String> savedSet = sharedPref.getStringSet(Constants.NOTES_ARRAY_KEY, null);
+        Set<String> newSet = new HashSet<>();
+        if(savedSet != null) {
+            newSet.addAll(savedSet);
+        }
+        newSet.add(noteToAdd);
+
+        editor.putString(Constants.NOTE_KEY, noteToAdd);
+        editor.putStringSet(Constants.NOTES_ARRAY_KEY, newSet);
         editor.apply();
+
         finish();
     }
 }

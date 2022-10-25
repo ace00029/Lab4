@@ -11,8 +11,12 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
+
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
+import java.util.Set;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -24,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         this.lvNotes = findViewById(R.id.lvNotes);
         this.adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, this.listNoteItems);
         this.lvNotes.setAdapter(adapter);
@@ -39,12 +44,21 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
-        String note = sharedPref.getString(Constants.BASE_NOTE_KEY, "NotSet");
+        //Deprecated
+        //SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
 
-        this.listNoteItems.clear();
-        this.listNoteItems.add(note);
-        this.adapter.notifyDataSetChanged();
+        //Current
+        SharedPreferences sharedPref = this.getSharedPreferences(Constants.NOTES_FILE, this.MODE_PRIVATE);
+        String lastSavedNote = sharedPref.getString(Constants.NOTE_KEY, "NA");
+        Set<String> savedSet = sharedPref.getStringSet(Constants.NOTES_ARRAY_KEY, null);
+
+        if(savedSet != null) {
+            this.listNoteItems.clear();
+            this.listNoteItems.addAll(savedSet);
+            this.adapter.notifyDataSetChanged();
+        }
+
+        Snackbar.make(lvNotes, String.format("%s: %s", getString(R.string.msg_last_saved_note), lastSavedNote), Snackbar.LENGTH_LONG).show();
 
         //In case You will need to append/remove values from array:
         //https://stackoverflow.com/questions/9648236/android-listview-not-updating-after-a-call-to-notifydatasetchanged
@@ -56,6 +70,11 @@ public class MainActivity extends AppCompatActivity {
             case R.id.add_note:
                 Intent i = new Intent(this, AddNoteActivity.class);
                 startActivity(i);
+                return true;
+            case R.id.remove_note:
+                return true;
+            case R.id.update_note:
+                Toast.makeText(getApplicationContext(), "Update Clicked", Toast.LENGTH_LONG).show();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
