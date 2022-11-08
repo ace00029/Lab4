@@ -6,4 +6,6 @@
     android:title="@string/remove_note"/>
 <item android:id="@+id/update_note"
     android:title="@string/update_note"/>
+<item android:id="@+id/dunno"
+    android:title="@string/dunno"/>
 </menu>

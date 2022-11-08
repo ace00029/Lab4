@@ -11,6 +11,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.snackbar.Snackbar;
@@ -38,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.notes_options_menu, menu);
+        //inflater.inflate(R.menu.secondary_options_menu, menu);
         return true;
     }
 
@@ -50,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
         //Current
         SharedPreferences sharedPref = this.getSharedPreferences(Constants.NOTES_FILE, this.MODE_PRIVATE);
         String lastSavedNote = sharedPref.getString(Constants.NOTE_KEY, "NA");
+        String lastSavedNoteDate = sharedPref.getString(Constants.NOTE_KEY_DATE, "1900-01-01");
         Set<String> savedSet = sharedPref.getStringSet(Constants.NOTES_ARRAY_KEY, null);
 
         if(savedSet != null) {
@@ -59,6 +62,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         Snackbar.make(lvNotes, String.format("%s: %s", getString(R.string.msg_last_saved_note), lastSavedNote), Snackbar.LENGTH_LONG).show();
+        Toast.makeText(this, lastSavedNoteDate, Toast.LENGTH_LONG).show();
 
         //In case You will need to append/remove values from array:
         //https://stackoverflow.com/questions/9648236/android-listview-not-updating-after-a-call-to-notifydatasetchanged
@@ -74,11 +78,16 @@ public class MainActivity extends AppCompatActivity {
             case R.id.remove_note:
                 return true;
             case R.id.update_note:
-                Toast.makeText(getApplicationContext(), "Update Clicked", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), R.string.msg_updated_clicked, Toast.LENGTH_LONG).show();
+                return true;
+            case R.id.dunno:
+                Toast.makeText(getApplicationContext(), R.string.msg_dunno_clicked, Toast.LENGTH_LONG).show();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
+
+
 }
 
