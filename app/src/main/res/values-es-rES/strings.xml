@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="add_note">Añade una nota</string>
+    <string name="save_and_close">Guardar y cerrar</string>
+    <string name="msg_last_saved_note" translatable="false">Ultima nota guardada</string>
+    <string name="remove_note">Eliminar nota</string>
+    <string name="update_note">Actualizar nota</string>
+    <string name="discard_changes">Descartar cambios</string>
+    <string name="select_delete_note">Selecciona una nota para eliminar</string>
+</resources>

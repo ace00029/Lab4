@@ -9,6 +9,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".AddNoteActivity"></activity>
+        <activity android:name=".DeleteNoteActivity"></activity>
+        <activity android:name=".UpdateNoteActivity"></activity>
         <activity android:name=".MainActivity"
                   android:exported="true">
             <intent-filter>
